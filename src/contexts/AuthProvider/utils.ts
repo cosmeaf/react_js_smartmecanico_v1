@@ -21,10 +21,11 @@ export function getUserLocalStorage(){
 export async function LoginRequest(username: string, password: string){
     try {
         const request = await Api.post('/token/', {username, password})
-        console.log('AXIOS API REQUEST ', request)
-        return request.data
+        if(request.status === 200){
+            return request.data
+        }
     } catch (error) {
-        return null
+        return error
     }
 }
 

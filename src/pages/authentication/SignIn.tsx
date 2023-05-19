@@ -1,28 +1,48 @@
 import { useState } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthProvider/useAuth';
 import Logo from '../../images/logo.svg';
 import './SignIn.css'
-import { useAuth } from '../../contexts/AuthProvider/useAuth';
-
+import { validateCredentials } from '../../utils/validationsAuth';
+import { ValidationErrors } from '../../utils/validationsTypes';
 
 
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<ValidationErrors>({});
   const auth = useAuth();
-  const navigate = useNavigate()
-  
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    try {
-      await auth.authenticate(email, password)
-      navigate("/dashboard");
-    } catch (error) {
-      console.log('LOGIN PAGE ', error)
-    }
+  const navigate = useNavigate();
+
+   
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const validationErrors = validateCredentials(email, password);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        const isSuccessful = await auth.authenticate(email, password);
+        if (isSuccessful) {
+            navigate("/dashboard");
+        } else {
+            console.log('AUTH ERROR ', auth.authError);
+        }
+    };
+
+
+  const clearError = (field: keyof ValidationErrors) => {
+    setErrors(prev => {
+      const newState = { ...prev };
+      delete newState[field];
+      return newState;
+    });
   };
 
+      
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="bg-gray-200">
@@ -171,10 +191,16 @@ const SignIn = () => {
                     Email
                   </label>
                   <div className="relative">
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} 
+                    <input 
+                      type="email" 
                       placeholder="Enter your email" 
+                      value={email} 
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                      onBlur={() => clearError('email')}
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
+                    {errors.email && <p className="text-danger font-bold mt-2">{errors.email}</p>}
+
                     <span className="absolute right-4 top-4">
                       <svg
                         className="fill-current"
@@ -200,10 +226,15 @@ const SignIn = () => {
                     Re-type Password
                   </label>
                   <div className="relative">
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                      placeholder="6+ Characters, 1 Capital letter"
+                    <input
+                      type="password" 
+                      placeholder="8+ Characters, 1 Capital letter"
+                      value={password} 
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                      onBlur={() => clearError('password')}
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
+                    {errors.password && <p className="text-danger font-bold mt-2">{errors.password}</p>}
 
                     <span className="absolute right-4 top-4">
                       <svg
@@ -282,6 +313,7 @@ const SignIn = () => {
                     </Link>
                   </p>
                 </div>
+                {auth.authError && <p className="text-center text-danger font-bold mt-3">{auth.authError}</p>}
               </form>
             </div>
           </div>
@@ -290,6 +322,7 @@ const SignIn = () => {
       </div>
     </div>
   );
+
 };
 
 export default SignIn;

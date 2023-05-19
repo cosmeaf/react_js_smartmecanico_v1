@@ -4,10 +4,12 @@ export interface IUser {
 }
 
 export interface IContext extends IUser {
-    authenticate: (email: string, password: string) => Promise<void>
+    authenticate: (email: string, password: string) => Promise<boolean>;
     logout: () => void;
-    isLoading: boolean
+    isLoading: boolean,
+    authError?: string
 }
+
 
 export interface IAuthProvider {
     children: JSX.Element

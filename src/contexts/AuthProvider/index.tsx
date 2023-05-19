@@ -6,7 +6,8 @@ export const AuthContext = createContext<IContext>({} as IContext);
 
 export const AuthProvider = ({children}: IAuthProvider) => {
     const [user, setUser] = useState<IUser | null>();
-    const [isLoading, setLoading] = useState(true); 
+    const [isLoading, setLoading] = useState(true);
+    const [authError, setAuthError] = useState("");
 
     useEffect(() => {
         const storedUser = getUserLocalStorage();
@@ -25,12 +26,20 @@ export const AuthProvider = ({children}: IAuthProvider) => {
     }, []);
     
 
-    async function authenticate (email: string, password: string){
-        const response = await LoginRequest(email, password)
-        const payload = {token : response.access, email}
-        setUser(payload)
-        setUserLocalStorage(payload)
+    async function authenticate(email: string, password: string): Promise<boolean> {
+        const response = await LoginRequest(email, password);
+        if (response.access) {
+            const payload = { token: response.access, email };
+            setUser(payload);
+            setUserLocalStorage(payload);
+            setAuthError("");
+            return true; // autenticação bem-sucedida
+        } else {
+            setAuthError(response?.response?.data?.detail || "Erro na autenticação.");
+            return false; // autenticação falhou
+        }
     }
+    
 
     function logout (){
         setUser(null)
@@ -38,7 +47,7 @@ export const AuthProvider = ({children}: IAuthProvider) => {
     }
 
     return (
-        <AuthContext.Provider value={{...user, authenticate, logout, isLoading }}>
+        <AuthContext.Provider value={{...user, authenticate, logout, isLoading, authError }}>
             {children}
         </AuthContext.Provider>
     )
