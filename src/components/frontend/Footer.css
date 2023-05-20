@@ -1,0 +1,155 @@
+/* Footer Mobile Responsive */
+@media only screen and (max-width: 1024px) {
+    .footer {
+      padding: 10px;
+    }
+  
+    .container {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  
+    .logo img {
+      width: 100px;
+    }
+  
+    .menu-list {
+      margin-top: 20px;
+      text-align: center;
+    }
+  
+    .menu-list li {
+      margin-bottom: 10px;
+    }
+  
+    .contact-info {
+      text-align: center;
+      margin-top: 20px;
+    }
+  
+    .social-media {
+      text-align: center;
+      margin-top: 20px;
+    }
+  
+    .form {
+      margin-top: 20px;
+    }
+  
+    .form input,
+    .form textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+  
+    .form button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 5px;
+    }
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .footer {
+      padding: 10px;
+    }
+  
+    .container {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  
+    .logo img {
+      width: 80px;
+    }
+  
+    .menu-list {
+      margin-top: 20px;
+      text-align: center;
+    }
+  
+    .menu-list li {
+      margin-bottom: 10px;
+    }
+  
+    .contact-info {
+      text-align: center;
+      margin-top: 20px;
+    }
+  
+    .social-media {
+      text-align: center;
+      margin-top: 20px;
+    }
+  
+    .form {
+      margin-top: 20px;
+    }
+  
+    .form input,
+    .form textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+  
+    .form button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 5px;
+    }
+  }
+  
+  @media only screen and (max-width: 425px) {
+    .logo img {
+      width: 60px;
+    }
+  
+    .menu-list {
+      margin-top: 10px;
+    }
+  
+    .menu-list li {
+      margin-bottom: 5px;
+    }
+  
+    .contact-info {
+      margin-top: 10px;
+    }
+  
+    .social-media {
+      margin-top: 10px;
+    }
+  
+    .form {
+      margin-top: 10px;
+    }
+  }
+  
+  @media only screen and (max-width: 320px) {
+    .logo img {
+      width: 50px;
+    }
+  
+    .menu-list {
+      margin-top: 5px;
+    }
+  
+    .menu-list li {
+      margin-bottom: 3px;
+    }
+  
+    .contact-info {
+      margin-top: 5px;
+    }
+  
+    .social-media {
+      margin-top: 5px;
+    }
+  
+    .form {
+      margin-top: 5px;
+    }
+  }
+  
