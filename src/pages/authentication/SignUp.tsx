@@ -12,10 +12,10 @@ import './SignIn.css'
 
 
 const SignUp: React.FC<RegistrationOptions> = () => {
-  const [username, setUsername] = useState("viviane");
-  const [email, setEmail] = useState("daianalopes8@gmail.com");
-  const [password, setPassword] = useState("qweasd32");
-  const [confirmPassword, setConfirmPassword] = useState("qweasd32");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<ValidationErrors>({});
 
   const { banner, showBanner } = useContext(BannerContext);
@@ -37,7 +37,8 @@ const SignUp: React.FC<RegistrationOptions> = () => {
         const errorData = response.response.data;
         console.log(errorData);
         setErrors(errorData);
-        showBanner('error', 'Registro falhou', '');
+        showBanner('error', 'Ops, Error ao registrar usuário, por favor tente mais tarde', '');
+        setTimeout(()=>{window.location.reload()}, 3000)
       } else {
         console.log(response);
         setUsername("");
@@ -45,10 +46,12 @@ const SignUp: React.FC<RegistrationOptions> = () => {
         setPassword("");
         setConfirmPassword("");
         showBanner('success', 'Registro concluído com sucesso!', '/sign-in');
+        setTimeout(()=>{window.location.reload()}, 5000)
       }
     } catch (error) {
       console.error(error);
       showBanner('error', 'Ocorreu um erro ao tentar registrar', '');
+      setTimeout(()=>{window.location.reload()}, 5000)
     }
   };
   
