@@ -1,0 +1,35 @@
+/* src/components/banner/Banner.css */
+.Banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    width: 400px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    border-width: 1px;
+    border-style: solid;
+    padding: 20px;
+    background-color: #fff;
+  }
+  
+  .Banner-icon {
+    font-size: 48px;
+  }
+  
+  .Banner-message {
+    text-align: center;
+  }
+  
+  .Banner-button {
+    width: 100%;
+    padding: 10px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  

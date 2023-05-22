@@ -1,11 +1,72 @@
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { validateRegistration } from '../../utils/validateRegistration';
+import { ValidationErrors } from '../../utils/validationsTypes';
+import { RegisterRequest } from '../../contexts/AuthProvider/utils';
+import { BannerContext } from '../../components/banner/BannerContext';
+import Banner from '../../components/banner/Banner';
 import Logo from '../../images/logo.svg';
 import './SignIn.css'
-const SignUp = () => {
+
+
+
+
+const SignUp: React.FC<RegistrationOptions> = () => {
+  const [username, setUsername] = useState("viviane");
+  const [email, setEmail] = useState("daianalopes8@gmail.com");
+  const [password, setPassword] = useState("qweasd32");
+  const [confirmPassword, setConfirmPassword] = useState("qweasd32");
+  const [errors, setErrors] = useState<ValidationErrors>({});
+
+  const { banner, showBanner } = useContext(BannerContext);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  
+    const validationErrors = validateRegistration(username, email, password, confirmPassword);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      showBanner('error', 'Existem erros de validação', '');
+      return;
+    }
+  
+    try {
+      const response = await RegisterRequest(username, email, password, confirmPassword);
+  
+      if (response.response && response.response.data) {
+        const errorData = response.response.data;
+        console.log(errorData);
+        setErrors(errorData);
+        showBanner('error', 'Registro falhou', '');
+      } else {
+        console.log(response);
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        showBanner('success', 'Registro concluído com sucesso!', '/sign-in');
+      }
+    } catch (error) {
+      console.error(error);
+      showBanner('error', 'Ocorreu um erro ao tentar registrar', '');
+    }
+  };
+  
+  const clearError = (field: keyof ValidationErrors) => {
+    setErrors((prev) => {
+      const newState = { ...prev };
+      delete newState[field];
+      return newState;
+    });
+  };
+
+  
+
+  
+
+
   return (
-
     <div className="flex justify-center items-center h-screen">
-
       <div className="rounded-3xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
@@ -142,10 +203,10 @@ const SignUp = () => {
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               <span className="mb-1.5 block font-medium">Start for free</span>
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign Up to TailAdmin
+                Sign Up to Smart Mecânico
               </h2>
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Name
@@ -153,9 +214,13 @@ const SignUp = () => {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder="Entre your nick name"
+                      value={username}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+                      onBlur={() => clearError('username')}
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
+                    {errors.username && <p className="text-danger font-bold mt-2">{errors.username}</p>}
 
                     <span className="absolute right-4 top-4">
                       <svg
@@ -189,8 +254,13 @@ const SignUp = () => {
                     <input
                       type="email"
                       placeholder="Enter your email"
+                      value={email}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                      onBlur={() => clearError('email')}
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
+                    {errors.email && <p className="text-danger font-bold mt-2">{errors.email}</p>}
+
 
                     <span className="absolute right-4 top-4">
                       <svg
@@ -219,9 +289,13 @@ const SignUp = () => {
                   <div className="relative">
                     <input
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder="8+ Characters, 1 Capital letter"
+                      value={password}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                      onBlur={() => clearError('password')}
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
+                    {errors.password && <p className="text-danger font-bold mt-2">{errors.password}</p>}
 
                     <span className="absolute right-4 top-4">
                       <svg
@@ -255,8 +329,12 @@ const SignUp = () => {
                     <input
                       type="password"
                       placeholder="Re-enter your password"
+                      value={confirmPassword}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
+                      onBlur={() => clearError('confirmPassword')}
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
+                    {errors.confirmPassword && <p className="text-danger font-bold mt-2">{errors.confirmPassword}</p>}
 
                     <span className="absolute right-4 top-4">
                       <svg
@@ -335,14 +413,19 @@ const SignUp = () => {
                     </Link>
                   </p>
                 </div>
+
+                {errors && <p className="text-danger font-bold mt-2 text-center">{errors.error}</p>}
+
               </form>
             </div>
           </div>
         </div>
       </div>
+
+      {banner && (
+        <Banner type={banner.type} message={banner.message} to={banner.to} />
+      )}
     </div>
-
-
   );
 };
 

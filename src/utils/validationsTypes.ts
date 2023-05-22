@@ -1,7 +1,9 @@
 // src/utils/validationsTypes.ts
 
 export interface ValidationErrors {
-    email?: string;
-    password?: string;
-  }
-  
+  username?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  error?: string;
+}
