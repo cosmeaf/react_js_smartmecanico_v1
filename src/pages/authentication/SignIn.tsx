@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../../images/logo.png';
 import Header from '../../components/frontend/Header';
 import { ValidationErrors } from '../../utils/validationsTypes';
 import { useAuth } from '../../contexts/AuthProvider/useAuth';
@@ -45,8 +44,6 @@ const SignIn: React.FC = () => {
             <Header />
             <div className="flex items-center justify-center h-screen border-t border-gray-1-animated">
                 <div className="w-full max-w-md" style={{ transform: "translateY(-100px)" }}>
-                    <h1 className="text-center text-3xl mb-6">Smart Mecânico</h1>
-                    <h6 className="text-center text-1xl mb-6">Área de Acesso</h6>
                     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
@@ -78,7 +75,7 @@ const SignIn: React.FC = () => {
                                 {errors.password && <p className="text-danger font-bold mt-2">{errors.password}</p>}
                             </div>
                             <div className="mb-10 mt-5 flex items-center justify-between">
-                                <Link className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" to="/register">
+                                <Link className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" to="/sign-up">
                                     Não tenho registro
                                 </Link>
                                 <Link className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" to="/forgot-password">
